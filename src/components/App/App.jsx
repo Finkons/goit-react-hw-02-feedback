@@ -22,8 +22,8 @@ export class App extends Component {
       ? Math.floor((this.state.good * 100) / this.countTotalFeedback())
       : 0;
 
-  onLeaveFeedback = elm => {
-    const name = elm.target.name;
+  onLeaveFeedback = e => {
+    const name = e.target.name;
     this.setState(prev => ({
       [name]: prev[name] + 1,
     }));
@@ -31,22 +31,25 @@ export class App extends Component {
 
   render() {
     const { good, neutral, bad } = this.state;
+    const TotalFeedback = this.countTotalFeedback();
+    const PositiveFeedbackPercentage = this.countPositiveFeedbackPercentage();
+    const LeaveFeedback = this.onLeaveFeedback;
     return (
       <Container>
         <Section title="Please leave feedback">
           <FeedbackOptions
             options={Object.keys(this.state)}
-            onLeaveFeedback={this.onLeaveFeedback}
+            onLeaveFeedback={LeaveFeedback}
           />
         </Section>
         <Section title="Statistics">
-          {this.countTotalFeedback() ? (
+          {TotalFeedback ? (
             <Statistics
               good={good}
               neutral={neutral}
               bad={bad}
-              total={this.countTotalFeedback()}
-              positivePercentage={this.countPositiveFeedbackPercentage()}
+              total={TotalFeedback}
+              positivePercentage={PositiveFeedbackPercentage}
             />
           ) : (
             <Notification message="There is no feedback" />
